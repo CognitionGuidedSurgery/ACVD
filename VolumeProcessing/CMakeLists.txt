@@ -1,35 +1,29 @@
-ADD_LIBRARY(vtkVolumeProcessing
+add_library(vtkVolumeProcessing
 vtkImageDataCleanLabels.cxx
 )
 
-TARGET_LINK_LIBRARIES(vtkVolumeProcessing ${VTK_LIBRARIES})
+target_link_libraries(vtkVolumeProcessing ${VTK_LIBRARIES})
 
-ADD_EXECUTABLE(VolumeCleanLabels VolumeCleanLabels.cxx)
-TARGET_LINK_LIBRARIES(VolumeCleanLabels vtkVolumeProcessing ${VTK_LIBRARIES})
 
-ADD_EXECUTABLE(VolumeSlice VolumeSlice.cxx)
-TARGET_LINK_LIBRARIES(VolumeSlice ${VTK_LIBRARIES})
+set_target_properties( vtkVolumeProcessing PROPERTIES
+  DEBUG_POSTFIX "-d"
+  VERSION "${ACVD_LIB_VERSION}"
+  SOVERSION "${ACVD_LIB_SOVERSION}"
+)
 
-ADD_EXECUTABLE(Minc2Mhd Minc2Mhd.cxx)
-TARGET_LINK_LIBRARIES(Minc2Mhd ${VTK_LIBRARIES})
+install( TARGETS vtkVolumeProcessing
+  EXPORT ACVDTargets
+  RUNTIME DESTINATION ${INSTALL_BIN_DIR}
+  LIBRARY DESTINATION ${INSTALL_LIB_DIR}
+  ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
+)
 
-ADD_EXECUTABLE(VolumeSubsample VolumeSubsample.cxx)
-TARGET_LINK_LIBRARIES(VolumeSubsample ${VTK_LIBRARIES})
+file( GLOB _vtkVolumeProcessing_hdrs *.h )
 
-ADD_EXECUTABLE(VolumeCrop VolumeCrop.cxx)
-TARGET_LINK_LIBRARIES(VolumeCrop ${VTK_LIBRARIES})
+install( FILES ${_vtkVolumeProcessing_hdrs}
+  DESTINATION ${INSTALL_INCLUDE_DIR}/ACVD/VolumeProcessing
+)
 
-ADD_EXECUTABLE(VolumeMedian VolumeMedian.cxx)
-TARGET_LINK_LIBRARIES(VolumeMedian ${VTK_LIBRARIES})
-
-ADD_EXECUTABLE(VolumeAnisotropicDiffusion VolumeAnisotropicDiffusion.cxx)
-TARGET_LINK_LIBRARIES(VolumeAnisotropicDiffusion ${VTK_LIBRARIES})
-
-#ADD_EXECUTABLE(OOCRead OOCRead.cxx vtkOOCMetaImageReader.cxx BinarySubimageWriter.cxx ResampledVolumeGenerator.cxx vtkMHDFileWriter.cxx)
-#TARGET_LINK_LIBRARIES(OOCRead vtkHybrid)
-
-ADD_EXECUTABLE(png2raw png2raw.cxx)
-TARGET_LINK_LIBRARIES(png2raw ${VTK_LIBRARIES})
-
-ADD_EXECUTABLE(readimage ReadImage.cxx)
-TARGET_LINK_LIBRARIES(readimage ${VTK_LIBRARIES})
+if( BUILD_EXAMPLES )
+  add_subdirectory( Examples )
+endif()

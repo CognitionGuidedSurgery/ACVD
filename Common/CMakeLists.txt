@@ -1,7 +1,6 @@
- 
  # --------------------------------------------------------------------------
  # Library compilation
- ADD_LIBRARY(vtkSurface
+add_library(vtkSurface
  RenderWindow.cxx
  vtkDelaunay.cxx
  vtkDualMeshDisplay.cxx
@@ -18,22 +17,27 @@
  vtkMyMinimalStandardRandomSequence.cxx
 #  vtkJSWriter.cxx
  )
- 
-TARGET_LINK_LIBRARIES(vtkSurface ${VTK_LIBRARIES})
+target_link_libraries(vtkSurface ${VTK_LIBRARIES})
 
-SET(COMMON_EXAMPLES
-viewer
-viewer2
-RandomTriangulation
-ExamplevtkSurface
-CleanMesh
-mesh2vtk
-vtk2ply
-stl2ply
-CheckOrientation
+set_target_properties( vtkSurface PROPERTIES
+  DEBUG_POSTFIX "-d"
+  VERSION "${ACVD_LIB_VERSION}"
+  SOVERSION "${ACVD_LIB_SOVERSION}"
 )
-FOREACH(loop_var ${COMMON_EXAMPLES})
-	ADD_EXECUTABLE(${loop_var} ${loop_var}.cxx)
-	TARGET_LINK_LIBRARIES(${loop_var} vtkSurface ${VTK_LIBRARIES})
-ENDFOREACH(loop_var)
 
+install( TARGETS vtkSurface
+  EXPORT ACVDTargets
+  RUNTIME DESTINATION ${INSTALL_BIN_DIR}
+  LIBRARY DESTINATION ${INSTALL_LIB_DIR}
+  ARCHIVE DESTINATION ${INSTALL_LIB_DIR}
+)
+
+file( GLOB _vtkSurface_hdrs *.h )
+
+install( FILES ${_vtkSurface_hdrs}
+  DESTINATION ${INSTALL_INCLUDE_DIR}/ACVD/Common
+)
+
+if( BUILD_EXAMPLES )
+  add_subdirectory( Examples )
+endif()
