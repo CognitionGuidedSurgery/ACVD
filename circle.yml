@@ -1,7 +1,7 @@
 dependencies:
   override:
     - sudo apt-get update
-    - sudo apt-get install libvtk5.8 libvtk5-devel
+    - sudo apt-get install libvtk5.8 libvtk5-dev
     - mkdir build && cd build && cmake .. && make -j 2
 test:
   override:
