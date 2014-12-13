@@ -1,9 +1,7 @@
 dependencies:
   override:
-    pre:
-      - sudo apt-get install libvtk5 libvtk5-devel
-    post:
-      - mkdir build && cd build && cmake . && make -j 2
+    - sudo apt-get install libvtk5 libvtk5-devel
+    - mkdir build && cd build && cmake . && make -j 2
 test:
   override:
     - echo 1 #make test or something needed
